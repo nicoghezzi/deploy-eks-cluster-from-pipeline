@@ -10,76 +10,51 @@ A hands-on CI/CD integration project focused on securely connecting Jenkins with
 
 ---
 
-## 📌 Overview
+# 🚀 Secure CI/CD Integration: Jenkins → AWS → EKS
 
-This project demonstrates how to build a secure, end-to-end CI/CD workflow:
+A hands-on CI/CD project integrating Jenkins with AWS and Amazon EKS to automate Kubernetes deployments while managing cloud credentials securely.
 
-- Configured Jenkins to authenticate with AWS securely  
-- Built pipelines to deploy Dockerized applications to EKS  
-- Enabled Jenkins to interact with Kubernetes using `kubectl`  
-- Implemented credential management best practices  
+## 🏗️ Architecture & Tech Stack
 
----
+**Workflow:** Jenkins → AWS CLI → Amazon EKS → Kubernetes workloads
 
-## ⚙️ Core Workflow
+- **CI/CD:** Jenkins Pipeline (`Jenkinsfile`)
+- **Cloud:** AWS, Amazon EKS
+- **Deployment:** Kubernetes, `kubectl`
+- **Security:** Jenkins Credentials Plugin, AWS IAM
+- **Automation:** Pipeline stages for build, packaging, and deployment
 
-### 1. AWS Access Validation
-- Verified AWS CLI configuration locally  
-- Ensured correct IAM permissions before pipeline integration  
+## ⚙️ Implementation
 
-### 2. Jenkins Pipeline Setup
-- Defined multi-stage pipeline using Jenkinsfile  
-- Automated build, packaging, and deployment steps  
+1. **AWS Access Validation:** Verified AWS CLI configuration and IAM permissions before integrating Jenkins.
+2. **Pipeline Automation:** Defined pipeline stages in `Jenkinsfile` to automate application build, packaging, and deployment.
+3. **Credential Management:** Used the Jenkins Credentials Plugin to inject AWS credentials at runtime instead of hardcoding sensitive values.
+4. **EKS Deployment:** Configured Kubernetes access through AWS CLI and kubeconfig, deployed workloads using `kubectl`, and validated deployment status.
 
-### 3. Secure Credential Management
-- Stored AWS credentials using Jenkins Credentials Plugin  
-- Injected secrets securely into pipeline runtime  
-- Avoided hardcoding sensitive information  
+## 🧠 Engineering Decisions & Trade-offs
 
-### 4. Kubernetes Deployment
-- Used `kubectl` within Jenkins pipeline  
-- Deployed and updated workloads on Amazon EKS  
-- Validated application status post-deployment  
+| Decision | Rationale | Trade-off |
+|---|---|---|
+| **Jenkins Pipeline** | Provides a customizable, code-defined workflow that integrates with existing enterprise tooling. | Requires maintenance of Jenkins agents, plugins, credentials, and build environments. |
+| **Jenkins Credentials Plugin** | Keeps AWS credentials outside application code and injects them when needed. | Credentials still require rotation, access controls, and careful handling within pipeline execution. AWS IAM role assumption through OIDC can reduce reliance on long-lived credentials. |
+| **AWS CLI and kubectl** | Uses standard tools to authenticate with AWS, configure EKS access, and deploy Kubernetes resources. | Adds dependencies to Jenkins agents and requires correct IAM permissions, kubeconfig, and Kubernetes authorization. |
+| **Direct Kubernetes deployment from Jenkins** | Keeps the deployment workflow straightforward and easy to troubleshoot. | Couples deployment execution to Jenkins availability; GitOps tools such as ArgoCD could provide continuous reconciliation and drift detection. |
 
----
+## 🛠️ Challenges & Solutions
 
-## 🧰 Tech Stack
+- **Credential exposure risk:** Removed hardcoded credentials and moved sensitive values into Jenkins credential storage.
+- **AWS integration issues:** Validated AWS CLI configuration and IAM permissions.
+- **Kubernetes access errors:** Verified kubeconfig, cluster connectivity, and access authorization.
+- **Pipeline reliability:** Aligned Jenkins execution environments, AWS authentication, and Kubernetes deployment requirements.
 
-- Jenkins (CI/CD)  
-- AWS (Cloud)  
-- Amazon EKS (Kubernetes)  
-- kubectl (Kubernetes CLI)  
-- AWS CLI  
-- Jenkins Credentials Plugin  
+## ✅ Results & Key Learnings
 
----
+- Established Jenkins-to-AWS integration.
+- Automated Kubernetes workload deployment to Amazon EKS.
+- Improved credential handling by externalizing secrets from application code.
+- Developed practical experience troubleshooting IAM permissions, kubeconfig, and pipeline execution environments.
 
-## ⚠️ Challenges & Fixes
+**Key takeaway:** Reliable CI/CD depends on more than pipeline syntax. It requires aligning identity, permissions, execution environments, and deployment configuration.
 
-- **Protecting sensitive data** → Removed hardcoded credentials, used Jenkins secure storage  
-- **AWS & Jenkins integration issues** → Validated IAM roles and CLI configuration  
-- **Kubernetes access errors** → Ensured correct kubeconfig and cluster access  
-
----
-
-## 💡 Key Learnings
-
-- Secure handling of credentials is critical in CI/CD pipelines  
-- Jenkins pipelines should externalize secrets using credential managers  
-- Kubernetes deployments can be fully automated using CLI tools inside pipelines  
-- IAM, kubeconfig, and pipeline environments must align for successful deployments  
-
----
-
-## ✅ Outcome
-
-- ✔ Secure Jenkins-to-AWS integration established  
-- ✔ Automated Kubernetes deployments via pipeline  
-- ✔ Credentials managed without exposing secrets  
-- ✔ Reliable CI/CD workflow for EKS deployments  
-
----
-
-## 🧪 Takeaway
-
-This project highlights how to securely integrate CI/CD pipelines with cloud-native infrastructure, enabling reliable and repeatable deployments to Amazon EKS while following best practices for credential management and automation.
+## 🚀 Author
+Nicolas Ghezzi LinkedIn: https://www.linkedin.com/in/nghezzi/
